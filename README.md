@@ -23,3 +23,11 @@ $ ng g app helloworld --project-root=apps/helloworld
 ```
 
 Note how we specify the project's root folder in the command line. The folder structure we employ categorizes apps and libraries under separate parent folders named `apps` and `libs` respectively.
+
+4. Generate a library:
+
+```
+$ ng g library shared --project-root=libs/shared
+```
+
+Issue `ng build shared` and `ng test shared`. Both commands should not produce any errors.
