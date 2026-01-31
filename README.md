@@ -6,30 +6,117 @@ This project is meant to act as a reference for an Angular monorepo project cons
 
 1. Generate the angular workspace with `--no-create-application` command line paramter.
 
-```
-$ ng new monorepo-demo --no-create-application
-```
+   ```
+   $ ng new monorepo-demo --no-create-application
+   ```
 
-2. Install additional packages. These are:
+2. Generate the app:
 
-```
-$ npm i @analogjs/platform @analogjs/vite-plugin-angular @analogjs/vitest-angular jsdom vite-tsconfig-paths --save-dev
-```
+   ```
+   $ ng g app helloworld --project-root=apps/helloworld
+   ```
 
-3. Generate the app:
+   Note how we specify the project's root folder in the command line. The folder structure we employ categorizes apps and libraries under separate parent folders named `apps` and `libs` respectively.
 
-```
-$ ng g app helloworld --project-root=apps/helloworld
-```
+3. Generate a library:
 
-Note how we specify the project's root folder in the command line. The folder structure we employ categorizes apps and libraries under separate parent folders named `apps` and `libs` respectively.
+   ```
+   $ ng g library shared --project-root=libs/shared
+   ```
 
-4. Generate a library:
+   Issue `ng build shared` and `ng test shared`. Both commands should not produce any errors.
 
-```
-$ ng g library shared --project-root=libs/shared
-```
+4. Import the default `<lib-shared>` component into the app and add it to the app template. It should be reflected in the app UI.
 
-Issue `ng build shared` and `ng test shared`. Both commands should not produce any errors.
+5. Integrate `vitest` plugin with the editor so that selected tests (or test suites) can be run from the IDE. These require additional packages. Essentially, we'll be replacing the default builder for the `test` target with `@analogjs/vitest-angular:test`.
 
-5. Import the default `<lib-shared>` component into the app and add it to the app template. It should be reflected in the app UI.
+   ```
+   $ npm i @analogjs/platform @analogjs/vite-plugin-angular @analogjs/vitest-angular jsdom vite-tsconfig-paths --save-dev
+   ```
+
+   Create the following files:
+   1. `tsconfig.spec.json` in workspace folder. This will be the dedicated Typescript configuration for running unit tests. This should extend the base `tsconfig.json`, but should've the following:
+
+      ```
+      // rootDir/tsconfig.spec.json
+      {
+        "extends": "./tsconfig.json",
+        "compilerOptions": {
+          "outDir": "../../out-tsc/spec",
+          "types": ["vitest/globals", "node"],
+          "paths": {
+            "shared": ["libs/shared"]
+          }
+        }
+      }
+      ```
+
+      Importantly, `types` should list `vitest/globals` so that common test functions such as `describe`, `it`, `beforeEach` are available globally. Secondly, `paths` should list the source folder of the libraries so that any `spec.ts` files in a peer project use the library's `.ts` source ensuring that the library doesn't have to be built before the peer project
+      tests are run.
+
+   2. Create `vitest.config.ts` & `src/test-setup.ts` in both the `helloworld` app and `shared` library project folders.
+
+      ```
+      // vitest.config.ts
+      import { defineConfig } from 'vite';
+
+      import angular from '@analogjs/vite-plugin-angular';
+      import viteTsConfigPaths from 'vite-tsconfig-paths';
+
+      export default defineConfig(({ mode }) => ({
+        plugins: [angular(), viteTsConfigPaths({ root: '../../' })],
+        test: {
+          globals: true,
+          setupFiles: ['src/test-setup.ts'],
+          environment: 'jsdom',
+          include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+          reporters: ['default'],
+        },
+      }));
+      ```
+
+      ```
+      // src/test-setup.ts
+      import '@analogjs/vitest-angular/setup-snapshots';
+      import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
+      import '@angular/compiler';
+
+      setupTestBed();
+      ```
+
+   3. Add `src/test-setup.ts` to the project's `tsconfig.spec.json`'s `files` list.
+
+      ```
+      // <project>/tsconfig.spec.json
+      {
+        "extends": "../../tsconfig.spec.json",
+        "compilerOptions": {
+          "outDir": "../../out-tsc/spec",
+          "types": ["vitest/globals"]
+        },
+        "files": ["src/test-setup.ts"],
+        "include": ["src/**/*.d.ts", "src/**/*.spec.ts"]
+      }
+      ```
+
+   4. Update `angular.json`'s `test` target to use `@anglogjs/vitest-angular:test` as the builder for every app and library configuration:
+
+      ```
+      // angular.json
+      ...
+      "shared": {
+        "architect": {
+          ...
+          "test": {
+            "builder": "@analogjs/vitest-angular:test",
+            "options": {
+              "tsConfig": "libs/shared/tsconfig.spec.json"
+            }
+          }
+        }
+      }
+      ```
+
+6. Issue `ng build` and `ng test` commands for all the apps and libraries in the workspace. If you followed the instructions above to a ditto, it should all work well. Also, if you've installed the official `vitest` VSCode plugin, you should see a green play button next to your test suite's `describe` and `it` calls. If you don't, close VSCode and reopen the workspace. Sometimes the plugin doesn't detect addition of `vitest.config.ts` or changes to its contents.
+
+That's it! The workspace is a proper monorepo, supporting any number of applications with code shared between them via the libraries in the same project.

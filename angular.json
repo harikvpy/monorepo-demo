@@ -24,9 +24,7 @@
                 "input": "apps/helloworld/public"
               }
             ],
-            "styles": [
-              "apps/helloworld/src/styles.css"
-            ]
+            "styles": ["apps/helloworld/src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -65,7 +63,10 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@analogjs/vitest-angular:test",
+          "options": {
+            "tsConfig": "apps/helloworld/tsconfig.spec.json"
+          }
         }
       }
     },
@@ -88,7 +89,7 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:unit-test",
+          "builder": "@analogjs/vitest-angular:test",
           "options": {
             "tsConfig": "libs/shared/tsconfig.spec.json"
           }

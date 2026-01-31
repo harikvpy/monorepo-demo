@@ -11,10 +11,9 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "baseUrl": ".",
     "paths": {
-      "shared": [
-        "./dist/shared"
-      ]
+      "shared": ["./dist/shared"]
     },
     "importHelpers": true,
     "target": "ES2022",
