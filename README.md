@@ -121,4 +121,12 @@ This is for Angular v21, which uses `vitest` as its unit test framework. Integra
 
 6. Issue `ng build` and `ng test` commands for all the apps and libraries in the workspace. If you followed the instructions above to a ditto, it should all work well. Also, if you've installed the official `vitest` VSCode plugin, you should see a green play button next to your test suite's `describe` and `it` calls. If you don't, close VSCode and reopen the workspace. Sometimes the plugin doesn't detect addition of `vitest.config.ts` or changes to its contents.
 
+## Key points
+
+- Employing `vitest` independently (outside of via the Angular CLI) uses a different build pipeline than what the CLI subjects it to. The `vitest.config.ts` & `test-setup.ts` files mentioned in step 2 are aimed exactly that. By using `@analogjs/vitest-angular:test` as the test builder, we're bypassing the `ng` native mechanisms for running the unit tests in the project.
+
+- We choose to override the test builder, so that tests can be run both by the `ng` CLI as well as from `Vitest` editor plugin. Ability to run tests from the IDE is quite powerful as it allows individual tests to be run and debugged -- all without switching context out of the editor.
+
+- If you encouter any issues during test or build, issue the corrollary `ng {build|test}` command on the project to see if the problem exists. If the problem exists only in `ng test` and not in `ng build` it indicates an issue with `vitest` not being run with the required correct configuration. Check your `vitest.config.ts`, `test-setup.ts` & `tsconfig.spec.json`. Could be a typo (like a wrong path or missing `files: ["src/test-setup.ts"]`) in one of these files.
+
 That's it! The workspace is a proper monorepo, supporting any number of applications with code shared between them via the libraries in the same project.
