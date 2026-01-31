@@ -16,8 +16,10 @@ $ ng new monorepo-demo --no-create-application
 $ npm i @analogjs/platform @analogjs/vite-plugin-angular @analogjs/vitest-angular jsdom vite-tsconfig-paths --save-dev
 ```
 
-3. Generate an app
+3. Generate the app:
 
 ```
-$ ng g app helloworld
+$ ng g app helloworld --project-root=apps/helloworld
 ```
+
+Note how we specify the project's root folder in the command line. The folder structure we employ categorizes apps and libraries under separate parent folders named `apps` and `libs` respectively.
