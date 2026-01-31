@@ -31,3 +31,5 @@ $ ng g library shared --project-root=libs/shared
 ```
 
 Issue `ng build shared` and `ng test shared`. Both commands should not produce any errors.
+
+5. Import the default `<lib-shared>` component into the app and add it to the app template. It should be reflected in the app UI.
