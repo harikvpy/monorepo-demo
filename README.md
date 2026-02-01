@@ -163,6 +163,30 @@ The `libs/helper` project demonstrates such a library. Points to note:
 - Each subpackage is stored as a subfolder under the project folder and they contain their own `ng-package.json` and `public-api.ts`.
 - The sub-package `ng-package.json` does not include `"dest": "..."` key as this is controlled by the value in the project's `ng-package.json`.
 
+## Linking to library sources
+
+The current setup requires that the libraries be built into the `./dist` folder before it can be used by the app.
+
+Another way to setup the libraries would be to let the typescript compiler import the relevant library TS code directly when the app is built (or `serve`d). This has the added benefit that libraries and the app source will be in sync at all times and when runtime errors occur, you can do source level debugging of the library code from the app source in the browser (or unit test).
+
+However, this requires that the path aliases in the base `tsconfig.json` point to the actual library's `public-api.ts` (or `index.ts`). So the tsconfig.json would look like this:
+
+```
+// tsconfig.json
+{
+  "compilerOptions": {
+    "paths": {
+      "shared": ["libs/shared/src/public-api.ts"]
+      "helper": ["libs/helper/public-api.ts"],
+      "helper/helper1": ["libs/helper/helper1/public-api.ts"],
+      "helper/helper2": ["libs/helper/helper2/public-api.ts"],
+    },
+  }
+}
+```
+
+One important point to highlight is that path aliases need to be created for every secondary entrypoint in the library. This is exhibited by the alises `helper/helper1` and `helper/helper2`.
+
 ## Key points
 
 - Employing `vitest` independently (outside of via the Angular CLI) uses a different build pipeline than what the CLI subjects it to. The `vitest.config.ts` & `test-setup.ts` files mentioned in step 2 are aimed exactly that. By using `@analogjs/vitest-angular:test` as the test builder, we're bypassing the `ng` native mechanisms for running the unit tests in the project.

@@ -13,8 +13,10 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "helper/*": ["./dist/helper/*"],
-      "shared": ["./dist/shared"]
+      "helper": ["libs/helper/public-api.ts"],
+      "helper/helper1": ["libs/helper/helper1/public-api.ts"],
+      "helper/helper2": ["libs/helper/helper2/public-api.ts"],
+      "shared": ["libs/shared/src/public-api.ts"]
     },
     "importHelpers": true,
     "target": "ES2022",

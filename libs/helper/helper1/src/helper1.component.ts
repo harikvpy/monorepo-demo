@@ -8,5 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class Helper1Component implements OnInit {
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('Helper1Component initialized');
+  }
 }
