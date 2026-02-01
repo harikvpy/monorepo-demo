@@ -2,7 +2,7 @@
 
 This project is meant to act as a reference for an Angular monorepo workspace consisting of multiple apps and libraries. Libraries can either be monolithic or consisting of sub-packages.
 
-The trend seems to be use `nx` to automate these, but using another tool on top of the core build tools hides a lot of the process complexity making it hard to troubleshoot when things go wrong or when you encounter issues. I wanted to mimic the `nx` capabilities while keeping the source pure without additional external dependencies.
+The trend seems to be use `nx` to automate these, but using another tool on top of the core build tools hides a lot of the process complexity making it hard to troubleshoot when things go wrong. I wanted to mimic the core `nx` capabilities while keeping the source as pure as possible without additional external dependencies.
 
 That said, there's one additional dependency -- `@analogjs/\*` -- three packages that automate configuring the test environment for running the unit tests from command line (`ng test`) and from within the VSCode IDE using the Vitest official plugin. If you do not require this feature, you can skip this too. The dependent packages now look like this:
 
