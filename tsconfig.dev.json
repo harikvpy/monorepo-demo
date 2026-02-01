@@ -1,0 +1,13 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "helper": ["libs/helper/public-api.ts"],
+      "helper/helper1": ["libs/helper/helper1/public-api.ts"],
+      "helper/helper2": ["libs/helper/helper2/public-api.ts"],
+      "shared": ["libs/shared/src/public-api.ts"]
+    }
+  }
+}

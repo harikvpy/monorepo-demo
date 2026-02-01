@@ -187,6 +187,10 @@ However, this requires that the path aliases in the base `tsconfig.json` point t
 
 One important point to highlight is that path aliases need to be created for every secondary entrypoint in the library. This is exhibited by the alises `helper/helper1` and `helper/helper2`.
 
+## Controlling build using multiple tsconfig files
+
+The repo also contains two additional `tsconfig` files -- `tsconfig.dev.json` and `tsconfig.prod.json`. The primary difference between these is the path alias. Production tsconfig, uses the transpiled library output from `dist/` to link with the app whereas `tsconfig.dev.json` links to the library source directly. Depending on your needs (CI/CD setup would typically link with the `dist/` output), you can tweak your `angular.json` to link to the appropriate tsconfig files for the app that in turn extends the most appropriate base `tsconfig.json`.
+
 ## Key points
 
 - Employing `vitest` independently (outside of via the Angular CLI) uses a different build pipeline than what the CLI subjects it to. The `vitest.config.ts` & `test-setup.ts` files mentioned in step 2 are aimed exactly that. By using `@analogjs/vitest-angular:test` as the test builder, we're bypassing the `ng` native mechanisms for running the unit tests in the project.
