@@ -13,6 +13,7 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
+      "helper/*": ["./dist/helper/*"],
       "shared": ["./dist/shared"]
     },
     "importHelpers": true,
@@ -38,6 +39,12 @@
     },
     {
       "path": "./libs/shared/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/helper/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/helper/tsconfig.spec.json"
     }
   ]
 }

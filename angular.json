@@ -95,6 +95,32 @@
           }
         }
       }
+    },
+    "helper": {
+      "projectType": "library",
+      "root": "libs/helper",
+      "sourceRoot": "libs/helper",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/helper/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "libs/helper/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@analogjs/vitest-angular:test",
+          "options": {
+            "tsConfig": "libs/helper/tsconfig.spec.json"
+          }
+        }
+      }
     }
   }
 }

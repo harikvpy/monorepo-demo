@@ -4,7 +4,8 @@
     "outDir": "../../out-tsc/spec",
     "types": ["vitest/globals", "node"],
     "paths": {
-      "shared": ["libs/shared"]
+      "shared": ["libs/shared"],
+      "helper/*": ["libs/helper/*"]
     }
   }
 }
